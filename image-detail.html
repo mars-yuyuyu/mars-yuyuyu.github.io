@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片详情</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(254, 252, 246);  /* 统一背景颜色 */
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.8rem;
+        }
+        
+        .content {
+            display: flex;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .image-section {
+            flex: 1;
+        }
+        
+        .detail-image {
+            max-width: 100%;
+            max-height: 70vh;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .info-section {
+            flex: 1;
+            color: #444;
+        }
+        
+        .info-section h2 {
+            color: #222;
+            margin-bottom: 15px;
+        }
+        
+        .info-section p {
+            margin-bottom: 15px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background: #0077cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .back-link:hover {
+            background: #005fa3;
+            text-decoration: none;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .detail-image {
+                max-height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>图片详情</h1>
+        
+        <div class="content">
+            <div class="image-section">
+                <img id="displayedImage" class="detail-image" src="" alt="图片详情">
+            </div>
+            
+            <div class="info-section">
+                <h2>图片信息</h2>
+                <p>这是一张来自您浏览的画廊的图片。每张图片都有其独特的故事和美感，值得我们细细品味。</p>
+                <p>图片来源于在线图片库，具有高质量的视觉效果和丰富的细节表现。您可以在这里欣赏到图片的完整内容。</p>
+                <p>图片尺寸：<span id="imageDimensions">加载中...</span></p>
+                <p>图片URL：<span id="imageUrl">-</span></p>
+                
+                <a href="index.html" class="back-link">返回首页</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 图片详情页面 | 来自呼吸效果图片展示</p>
+        </div>
+    </div>
+
+    <script>
+        // 获取URL参数
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageUrl = getUrlParameter('img');
+            const displayedImage = document.getElementById('displayedImage');
+            const imageDimensions = document.getElementById('imageDimensions');
+            const imageUrlDisplay = document.getElementById('imageUrl');
+            
+            if (imageUrl) {
+                // 设置图片源
+                displayedImage.src = decodeURIComponent(imageUrl);
+                
+                // 显示图片URL
+                const decodedUrl = decodeURIComponent(imageUrl);
+                imageUrlDisplay.textContent = decodedUrl.length > 50 ? decodedUrl.substring(0, 50) + '...' : decodedUrl;
+                
+                // 当图片加载完成时获取尺寸
+                displayedImage.onload = function() {
+                    imageDimensions.textContent = `${this.naturalWidth} × ${this.naturalHeight} 像素`;
+                };
+            } else {
+                displayedImage.src = 'https://via.placeholder.com/800x600?text=图片未找到';
+                displayedImage.alt = '图片未找到';
+                imageDimensions.textContent = '无法获取';
+            }
+        });
+    </script>
+</body>
+</html>

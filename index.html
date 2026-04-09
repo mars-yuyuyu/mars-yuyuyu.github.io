@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>呼吸飘移 · 全盒缩放</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: rgb(254, 252, 246);  /* 设置为米白色背景 */
+            min-height: 100vh;
+            overflow: hidden;  /* 超出视口的部分隐藏，实现“飘出去再回来” */
+        }
+        
+        #imageContainer {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        .image {
+            position: absolute;
+            overflow: hidden;
+            will-change: transform;
+            transform-origin: center center;
+        }
+        
+        .inner {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* 内层不再设置动画，呼吸完全由外层 transform 控制 */
+        }
+        
+        .inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;       /* 图片填满盒子，盒子缩放时图片自然缩放 */
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="imageContainer"></div>
+    
+    <!-- 添加左上角标题 -->
+    <h1 style="position: absolute; top: 50px; left: 50px; font-weight: bold; color: #333; z-index: 1000; font-size: 30px;">
+        Folklore Ecology
+    </h1>
+    <script>
+        (function() {
+            const imageContainer = document.getElementById('imageContainer');
+            
+            // 图片URL池 - 使用本地images文件夹
+            const imageUrls = [
+                'images/image1.png',
+                'images/image2.png',
+                'images/image3.png',
+                'images/image4.png',
+                'images/image5.png',
+                'images/image6.png',
+                'images/image7.png',
+                'images/image8.png',
+                'images/image9.png',
+                'images/image10.png',
+                'images/image11.png',
+                'images/image12.png',
+                'images/image13.png',
+                'images/image14.png',
+                'images/image15.png',
+                'images/image16.png',
+                'images/image17.png',
+                'images/image18.png'
+            ];
+            
+            const imageCount = 15;
+            const IMAGE_SIZE = 250;          // 基础大小
+
+            let imagesData = [];               // 存储每个图片的动画参数
+            let animationFrameId = null;
+
+            // 种子随机生成器 (保证每次刷新参数固定，但不同图片不同)
+            function seededRandom(seed) {
+                return function() {
+                    seed = (seed * 9301 + 49297) % 233280;
+                    return seed / 233280;
+                };
+            }
+
+            // 创建图片DOM (呼吸动画改为由外层JS驱动)
+            function createImageElement(index) {
+                const imageDiv = document.createElement('div');
+                imageDiv.className = 'image';
+
+                const innerDiv = document.createElement('div');
+                innerDiv.className = 'inner';
+
+                const imageUrlIndex = index % imageUrls.length;
+                const img = document.createElement('img');
+                img.src = imageUrls[imageUrlIndex];
+                img.alt = `浮动图 ${index + 1}`;
+
+                // 点击跳转
+                imageDiv.addEventListener('click', function() {
+                    const targetUrl = `image-detail.html?img=${encodeURIComponent(imageUrls[imageUrlIndex])}`;
+                    window.open(targetUrl, '_blank');
+                });
+
+                innerDiv.appendChild(img);
+                imageDiv.appendChild(innerDiv);
+                return imageDiv;
+            }
+
+            // 生成固定随机位置 (图片完全在视口内)
+            function getFixedRandomPosition(index, containerWidth, containerHeight) {
+                const maxX = Math.max(0, containerWidth - IMAGE_SIZE);
+                const maxY = Math.max(0, containerHeight - IMAGE_SIZE);
+                const seed = (index * 9301 + 49297) % 233280;
+                const rand = seededRandom(seed);
+                const x = Math.floor(rand() * maxX);
+                const y = Math.floor(rand() * maxY);
+                return { x, y };
+            }
+
+            // 初始化所有图片 (布局 + 飘动参数 + 呼吸参数)
+            function initImages() {
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                    animationFrameId = null;
+                }
+
+                imageContainer.innerHTML = '';
+                imagesData = [];
+
+                const containerWidth = imageContainer.clientWidth;
+                const containerHeight = imageContainer.clientHeight;
+
+                if (containerWidth === 0 || containerHeight === 0) {
+                    console.warn('容器尺寸为0，等待resize');
+                    return;
+                }
+
+                for (let i = 0; i < imageCount; i++) {
+                    const imageEl = createImageElement(i);
+                    
+                    // 1. 设置基础位置和大小 (固定大小保证初始不重叠)
+                    const pos = getFixedRandomPosition(i, containerWidth, containerHeight);
+                    imageEl.style.width = IMAGE_SIZE + 'px';
+                    imageEl.style.height = IMAGE_SIZE + 'px';
+                    imageEl.style.left = pos.x + 'px';
+                    imageEl.style.top = pos.y + 'px';
+                    
+                    // 2. 生成该图片的随机参数 (基于索引种子，保证每次刷新一致)
+                    let seed = (i * 9301 + 49297) % 233280;
+                    const rand = seededRandom(seed);
+
+                    // ---- 飘动参数 (大幅度，允许飘出视口) ----
+                    const ampX = (0.2 + rand() * 0.4) * containerWidth;   // 20% ~ 60% 视口宽度
+                    const ampY = (0.2 + rand() * 0.4) * containerHeight;  // 20% ~ 60% 视口高度
+                    const freqX = 0.2 + rand() * 0.8;                     // 0.2~1.0 rad/s
+                    const freqY = 0.2 + rand() * 0.8;
+                    const phaseX = rand() * 2 * Math.PI;
+                    const phaseY = rand() * 2 * Math.PI;
+
+                    // ---- 呼吸参数 (使整个盒子缩放，不再局限于内层) ----
+                    // 呼吸周期 3~7 秒，转换为角频率: 2*PI / T
+                    const breathPeriod = 3 + rand() * 4;                  // 3~7秒
+                    const breathFreq = (2 * Math.PI) / breathPeriod;      // 角频率
+                    const breathPhase = rand() * 2 * Math.PI;             // 随机相位
+
+                    imagesData.push({
+                        element: imageEl,
+                        baseX: pos.x,
+                        baseY: pos.y,
+                        ampX, ampY,
+                        freqX, freqY,
+                        phaseX, phaseY,
+                        breathFreq,
+                        breathPhase
+                    });
+
+                    imageContainer.appendChild(imageEl);
+                }
+
+                startFloatAnimation();
+            }
+
+            // 启动组合动画 (飘移 + 呼吸缩放)
+            function startFloatAnimation() {
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+                function update() {
+                    const now = Date.now() / 5000; // 秒为单位
+
+                    for (let data of imagesData) {
+                        const { element, baseX, baseY, ampX, ampY, freqX, freqY, phaseX, phaseY, breathFreq, breathPhase } = data;
+                        
+                        // 飘移偏移量
+                        const dx = ampX * Math.sin(now * freqX + phaseX);
+                        const dy = ampY * Math.sin(now * freqY + phaseY);
+                        
+                        // 呼吸缩放因子: 范围 1 ~ 1.15 (模拟原动画 0%->1, 50%->1.15, 100%->1)
+                        // 使用 sin 映射: (sin(θ) + 1)/2 范围 0~1, 乘以 0.15 再加 1 → 1~1.15
+                        const breathValue = 1 + 0.35 * ( (Math.sin(now * breathFreq + breathPhase) + 1) / 2 );
+                        
+                        // 合并 transform: 先平移后缩放 (平移距离受缩放影响不大，因缩放幅度小)
+                        element.style.transform = `translate(${dx}px, ${dy}px) scale(${breathValue})`;
+                    }
+
+                    animationFrameId = requestAnimationFrame(update);
+                }
+
+                update();
+            }
+
+            // 窗口大小改变时重新布局 (基准位置适应新视口，振幅比例更新)
+            window.addEventListener('resize', () => {
+                initImages();
+            });
+
+            // 启动
+            initImages();
+        })();
+    </script>
+</body>
+</html>

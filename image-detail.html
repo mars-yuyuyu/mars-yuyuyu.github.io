@@ -3,155 +3,439 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图片详情</title>
+    <title>Herb Detail</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: rgb(254, 252, 246);  /* 统一背景颜色 */
-            padding: 20px;
-            line-height: 1.6;
+            min-height: 100vh;
+            font-family: "Times New Roman", Georgia, serif;
+            color: #1f1f1f;
+            background: rgb(248, 243, 231);
         }
-        
-        .container {
-            max-width: 1200px;
+
+        .page {
+            max-width: 1280px;
             margin: 0 auto;
-        }
-        
-        h1 {
-            color: #333;
-            text-align: center;
-            margin: 20px 0;
-            font-size: 1.8rem;
-        }
-        
-        .content {
+            min-height: 100vh;
             display: flex;
-            gap: 30px;
-            margin: 30px 0;
+            flex-direction: column;
+            justify-content: center;
+            padding: 24px 48px 28px;
         }
-        
-        .image-section {
-            flex: 1;
+
+        .title-top {
+            font-size: 56px;
+            font-style: italic;
+            font-weight: 500;
+            line-height: 1;
+            margin-bottom: 32px;
         }
-        
-        .detail-image {
-            max-width: 100%;
-            max-height: 70vh;
+
+        .title-top .cn {
+            font-style: normal;
+            font-size: 58px;
+            margin-left: 10px;
+            font-weight: 700;
+        }
+
+        .main-section {
+            display: grid;
+            grid-template-columns: 330px 1fr;
+            gap: 28px;
+            align-items: start;
+            margin-top: 10px;
+        }
+
+        .left-panel {
+            position: relative;
+            min-height: 390px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .herb-image {
+            width: 100%;
+            max-width: 340px;
+            margin-top: 50px;
             display: block;
-            margin: 0 auto;
+            object-fit: contain;
         }
-        
-        .info-section {
-            flex: 1;
-            color: #444;
+
+        .right-panel {
+            padding-top: 18px;
         }
-        
-        .info-section h2 {
-            color: #222;
-            margin-bottom: 15px;
+
+        .name-en {
+            font-size: 76px;
+            font-weight: 700;
+            font-style: italic;
+            line-height: 1;
         }
-        
-        .info-section p {
-            margin-bottom: 15px;
+
+        .name-latin {
+            font-size: 67px;
+            font-weight: 500;
+            font-style: italic;
+            margin-top: 8px;
+            line-height: 1;
         }
-        
+
+        .divider {
+            margin: 15px 0 40px;
+            border: 0;
+            border-top: 2px solid #262626;
+            width: 131%;
+        }
+
+        .essence {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .essence .label {
+            font-style: italic;
+            font-weight: 700;
+        }
+
+        .desc {
+            max-width: 820px;
+            font-size: 40px;
+            line-height: 1.32;
+        }
+
+        .audio-block {
+            width: 280px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .audio-block audio {
+            width: 100%;
+            height: 40px;
+        }
+
+        .bottom-icons {
+            margin-top: 34px;
+            margin-left: 360px;
+            display: flex;
+            align-items: flex-end;
+            gap: 18px;
+        }
+
+        .bottom-icons img {
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            display: block;
+        }
+
         .back-link {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-top: 20px;
-            background: #0077cc;
-            color: white;
+            position: fixed;
+            right: 28px;
+            bottom: 18px;
+            color: #7a6b5b;
             text-decoration: none;
-            border-radius: 4px;
-            font-size: 1rem;
+            font-size: 14px;
+            opacity: 0.8;
         }
-        
+
         .back-link:hover {
-            background: #005fa3;
-            text-decoration: none;
+            opacity: 1;
+            text-decoration: underline;
         }
-        
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #777;
-            font-size: 0.9rem;
-            margin-top: 30px;
-            border-top: 1px solid #eee;
+
+        @media (max-width: 1100px) {
+            .title-top {
+                font-size: 36px;
+            }
+
+            .title-top .cn {
+                font-size: 38px;
+            }
+
+            .main-section {
+                grid-template-columns: 260px 1fr;
+            }
+
+            .name-en {
+                font-size: 54px;
+            }
+
+            .name-latin {
+                font-size: 44px;
+            }
+
+            .essence {
+                font-size: 30px;
+            }
+
+            .desc {
+                font-size: 31px;
+            }
+
+            .bottom-icons {
+                margin-left: 285px;
+            }
+
         }
-        
-        @media (max-width: 768px) {
-            .content {
-                flex-direction: column;
+
+        @media (max-width: 780px) {
+            .page {
+                min-height: auto;
+                padding: 24px 18px;
             }
-            
-            .detail-image {
-                max-height: 50vh;
+
+            .main-section {
+                grid-template-columns: 1fr;
+                gap: 12px;
             }
+
+            .left-panel {
+                min-height: 200px;
+                max-width: 280px;
+            }
+
+            .herb-image {
+                max-width: 400px;
+                margin-top: 12px;
+            }
+
+            .name-en {
+                font-size: 46px;
+            }
+
+            .name-latin {
+                font-size: 38px;
+            }
+
+            .essence {
+                font-size: 26px;
+            }
+
+            .desc {
+                font-size: 24px;
+            }
+
+            .bottom-icons {
+                margin-left: 0;
+                margin-top: 22px;
+            }
+
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>图片详情</h1>
-        
-        <div class="content">
-            <div class="image-section">
-                <img id="displayedImage" class="detail-image" src="" alt="图片详情">
+    <div class="page">
+        <!-- 这里替换：左上角标题（英文 + 中文） -->
+        <h1 class="title-top">
+            <span id="titleEn" class="en">Da Zao</span><span id="titleCn" class="cn">大枣</span>
+        </h1>
+
+        <section class="main-section">
+            <div class="left-panel">
+                <!-- 这里替换：左侧主图。默认读取 ?img= 参数 -->
+                <img id="herbImage" class="herb-image" src=" " alt="Herb image">
+                <!-- 这里替换：音频路径由数据配置中的 audioSrc 控制 -->
+                <div id="audioBlock" class="audio-block">
+                    <audio id="detailAudio" controls preload="none">
+                        <source id="detailAudioSource" src="" type="audio/mpeg">
+                        您的浏览器不支持音频播放。
+                    </audio>
+                </div>
             </div>
-            
-            <div class="info-section">
-                <h2>图片信息</h2>
-                <p>这是一张来自您浏览的画廊的图片。每张图片都有其独特的故事和美感，值得我们细细品味。</p>
-                <p>图片来源于在线图片库，具有高质量的视觉效果和丰富的细节表现。您可以在这里欣赏到图片的完整内容。</p>
-                <p>图片尺寸：<span id="imageDimensions">加载中...</span></p>
-                <p>图片URL：<span id="imageUrl">-</span></p>
-                
-                <a href="index.html" class="back-link">返回首页</a>
+
+            <div class="right-panel">
+                <!-- 这里替换：英文名 -->
+                <h2 id="nameEn" class="name-en">Jujube</h2>
+                <!-- 这里替换：拉丁学名 -->
+                <p id="nameLatin" class="name-latin">Ziziphus jujuba</p>
+                <hr class="divider">
+                <!-- 这里替换：属性标签 -->
+                <p class="essence"><span id="essenceLabel" class="label">Essence:</span> <span id="essenceValue">Sweet, warm</span></p>
+                <!-- 这里替换：正文介绍 -->
+                <p id="descText" class="desc">
+                    The jujube nurtures the spleen and stomach, nourishes the blood and calms the spirit.
+                    It is often added to decoctions to harmonize other herbs, ensuring everything is well-digested.
+                </p>
             </div>
+        </section>
+
+        <div id="bottomIcons" class="bottom-icons">
+            <img id="icon1" src="images/土.png" alt="icon 1">
+            <img id="icon2" src="images/火.png" alt="icon 2">
         </div>
-        
-        <div class="footer">
-            <p>© 2023 图片详情页面 | 来自呼吸效果图片展示</p>
-        </div>
+
     </div>
 
+    <a href="index.html" class="back-link">Back to index</a>
+
     <script>
-        // 获取URL参数
         function getUrlParameter(name) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name);
         }
 
-        // 页面加载完成后执行
+        function normalizeImageKey(url) {
+            if (!url) return '';
+            const clean = url.split('?')[0].split('#')[0].replace(/\\/g, '/');
+            const fileName = clean.split('/').pop();
+            return fileName ? fileName.toLowerCase() : clean.toLowerCase();
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const imageUrl = getUrlParameter('img');
-            const displayedImage = document.getElementById('displayedImage');
-            const imageDimensions = document.getElementById('imageDimensions');
-            const imageUrlDisplay = document.getElementById('imageUrl');
-            
+            const herbImage = document.getElementById('herbImage');
+            const titleEn = document.getElementById('titleEn');
+            const titleCn = document.getElementById('titleCn');
+            const nameEn = document.getElementById('nameEn');
+            const nameLatin = document.getElementById('nameLatin');
+            const essenceLabel = document.getElementById('essenceLabel');
+            const essenceValue = document.getElementById('essenceValue');
+            const descText = document.getElementById('descText');
+            const bottomIcons = document.getElementById('bottomIcons');
+            const icon1 = document.getElementById('icon1');
+            const icon2 = document.getElementById('icon2');
+            const audioBlock = document.getElementById('audioBlock');
+            const detailAudio = document.getElementById('detailAudio');
+            const detailAudioSource = document.getElementById('detailAudioSource');
+
+            // 这里维护“图片 -> 详情内容”的映射
+            // key 建议写文件名（如 image1.png），点击该图后会自动匹配
+            const herbDataMap = {
+                '大枣图.png': {
+                    titleEn: 'Da Zao',
+                    titleCn: '大枣',
+                    nameEn: 'Jujube',
+                    nameLatin: 'Ziziphus jujuba',
+                    essenceLabel: 'Essence:',
+                    essenceValue: 'Sweet, warm',
+                    descText: 'The jujube nurtures the spleen and stomach, nourishes the blood and calms the spirit. It is often added to decoctions to harmonize other herbs, ensuring everything is well-digested.',
+                    icon1: 'images/土.png',
+                    icon2: 'images/火.png',
+                    audioSrc: ''
+                },
+                // 示例：你可以按这个格式继续加 image2.png、image3.png ...
+                '甘草图.png': {
+                    titleEn: 'Gan Cao',
+                    titleCn: '甘草',
+                    nameEn: 'Chinese Licorice',
+                    nameLatin: 'Glycyrrhiza uralensis',
+                    essenceLabel: 'Essence:',
+                    essenceValue: 'Sweet, neutral',
+                    descText: 'The Chinese Licorice tonifies the spleen, moistens the lungs, clears heat and relieves toxicity. Known as a mediator, it is commonly tucked into formulas to tame the harshness of other herbs, and weave balance in decoctions.',
+                    icon1: 'images/土.png',
+                    icon2: 'images/火.png',
+                    audioSrc: ''
+                },
+
+                '当归图.png': {
+                    titleEn: 'Dang Gui',
+                    titleCn: '当归',
+                    nameEn: 'Angelica sinensis',
+                    essenceLabel: 'Essence:',
+                    essenceValue: 'Sweet, acrid, warm',
+                    descText: 'The Dong Quai nourishes and awakens the blood, regulates female cycles, and moistens the inner paths. It is a cornerstone of women’s health, often called upon to help with flow irregularities, blood deficiency, and dryness that stalls the body’s digestive paths.',
+                    icon1: 'images/土.png',
+                    icon2: 'images/火.png',
+                    audioSrc: ''
+                },
+
+                '黄芪图.png': {
+                    titleEn: 'Huang Qi',
+                    titleCn: '黄芪',
+                    nameEn: 'Mongolian Milkvetch',
+                    nameLatin: 'Astragalus propinquus',
+                    essenceLabel: 'Known to be:',
+                    essenceValue: 'Sweet, slightly warm',
+                    descText: 'The Mongolian Milkvetch builds a shield for the immune system, awakening the tissues so that they can regenerate and heal. It is often used for fatigue, weak immunity, spontaneous sweating, and to support recovery from chronic illness.',
+                    icon1: 'images/土.png',
+                    icon2: 'images/火.png',
+                    audioSrc: ''
+                },
+
+                '大黄图.png': {
+                    titleEn: 'Da Huang',
+                    titleCn: '大黄',
+                    nameEn: 'Chinese Rhubarb',
+                    nameLatin: 'Rheum palmatum',
+                    essenceLabel: 'Known to be:',
+                    essenceValue: 'Bitter, cold',
+                    descText: 'The Chinese Rhubarb is a potent force that drains heat and purges accumulation, clears damp-heat, and invigorates the blood. It awakens stagnant intestinal flows, but use it with caution due to its strong purgative effect.',
+                    icon1: 'images/土.png',
+                    icon2: 'images/火.png',
+                    audioSrc: ''
+                },
+
+                '桔梗图.png': {
+                    titleEn: 'Jie Geng',
+                    titleCn: '桔梗',
+                    nameEn: 'Balloon Flower',
+                    nameLatin: 'Platycodon grandiflorus',
+                    essenceLabel: 'Known to be:',
+                    essenceValue: 'Bitter, acrid, neutral',
+                    descText: 'The Balloon Flower serves as a special messenger, guiding the actions of other herbs upwards towards the lungs. It excels at expelling phlegm and is excellent at calming irritation in the throat, acting as an anchor for the respiratory health.',
+                    icon1: 'images/土.png',
+                    icon2: 'images/火.png',
+                    audioSrc: ''
+                },
+
+                '研磨图.png': {
+                    titleEn: 'Yan Mo',
+                    titleCn: '研磨',
+                    nameEn: 'Grinding',
+                    essenceLabel: 'Tools:',
+                    essenceValue: 'A mortar and pestle.',
+                    descText: 'Increasing herbs surface area, allowing for better extraction of active compounds.',
+                    icon1: 'images/土.png',
+                    icon2: 'images/火.png',
+                    // 研磨图专用：在主图下方显示音频条
+                    // 这里替换成你的音频文件路径，例如：audio/yanmo.mp3
+                    audioSrc: 'audio/yanmo.mp3'
+                }
+            };
+
             if (imageUrl) {
-                // 设置图片源
-                displayedImage.src = decodeURIComponent(imageUrl);
-                
-                // 显示图片URL
                 const decodedUrl = decodeURIComponent(imageUrl);
-                imageUrlDisplay.textContent = decodedUrl.length > 50 ? decodedUrl.substring(0, 50) + '...' : decodedUrl;
-                
-                // 当图片加载完成时获取尺寸
-                displayedImage.onload = function() {
-                    imageDimensions.textContent = `${this.naturalWidth} × ${this.naturalHeight} 像素`;
-                };
+                herbImage.src = decodedUrl;
+
+                const dataKey = normalizeImageKey(decodedUrl);
+                const detail = herbDataMap[dataKey];
+
+                if (detail) {
+                    titleEn.textContent = detail.titleEn || '';
+                    titleCn.textContent = detail.titleCn || '';
+                    nameEn.textContent = detail.nameEn || '';
+                    nameLatin.textContent = detail.nameLatin || '';
+                    essenceLabel.textContent = detail.essenceLabel || '';
+                    essenceValue.textContent = detail.essenceValue || '';
+                    descText.textContent = detail.descText || '';
+                    icon1.src = detail.icon1 || icon1.src;
+                    icon2.src = detail.icon2 || icon2.src;
+                    if (detail.audioSrc) {
+                        // 仅研磨图等带音频条目隐藏 icon
+                        bottomIcons.style.display = 'none';
+                        audioBlock.style.display = 'block';
+                        detailAudioSource.src = detail.audioSrc;
+                        detailAudio.load();
+                    } else {
+                        // 其他药材保留 icon 位置
+                        bottomIcons.style.display = 'flex';
+                        audioBlock.style.display = 'none';
+                        detailAudio.pause();
+                        detailAudio.currentTime = 0;
+                        detailAudioSource.src = '';
+                        detailAudio.load();
+                    }
+                }
             } else {
-                displayedImage.src = 'https://via.placeholder.com/800x600?text=图片未找到';
-                displayedImage.alt = '图片未找到';
-                imageDimensions.textContent = '无法获取';
+                // 这里可改成你希望的默认图片路径
+                herbImage.src = 'images/image1.png';
             }
         });
     </script>

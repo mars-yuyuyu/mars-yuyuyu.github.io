@@ -15,6 +15,7 @@
             background: rgb(254, 252, 246);  /* 设置为米白色背景 */
             min-height: 100vh;
             overflow: hidden;  /* 超出视口的部分隐藏，实现“飘出去再回来” */
+            font-family: "Times New Roman", Georgia, serif;
         }
         
         #imageContainer {
@@ -45,43 +46,58 @@
             object-fit: cover;       /* 图片填满盒子，盒子缩放时图片自然缩放 */
             display: block;
         }
+
+        .title-fixed-image {
+            position: fixed;
+            top: 40px;
+            left: 400px;  /* 固定在标题右侧 */
+            width: 350px;
+            height: 350px;
+            object-fit: contain;
+            z-index: 1001;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
     <div id="imageContainer"></div>
     
     <!-- 添加左上角标题 -->
-    <h1 style="position: absolute; top: 50px; left: 50px; font-weight: bold; color: #333; z-index: 1000; font-size: 30px;">
-        Folklore Ecology
+    <h1 style="position: absolute; top: 50px; left: 50px; font-weight: bold; color: #333; z-index: 1000; font-size: 58px; font-family: 'Times New Roman', Georgia, serif;">
+        YAO:
     </h1>
+    <h2 style="position: absolute; top: 120px; left: 50px; color: #333; z-index: 1000; font-size: 45px; font-style: italic; font-family: 'Times New Roman', Georgia, serif;">
+        a herbal archive
+    </h2>
+    <img class="title-fixed-image" src="images/五行生克图.png" alt="标题右侧固定图片">
     <script>
         (function() {
             const imageContainer = document.getElementById('imageContainer');
             
             // 图片URL池 - 使用本地images文件夹
             const imageUrls = [
-                'images/image1.png',
-                'images/image2.png',
-                'images/image3.png',
-                'images/image4.png',
-                'images/image5.png',
-                'images/image6.png',
-                'images/image7.png',
-                'images/image8.png',
-                'images/image9.png',
-                'images/image10.png',
-                'images/image11.png',
-                'images/image12.png',
-                'images/image13.png',
-                'images/image14.png',
-                'images/image15.png',
-                'images/image16.png',
-                'images/image17.png',
-                'images/image18.png'
+                'images/大黄图.png',
+                'images/大枣图.png',
+                'images/当归图.png',
+                'images/甘草图.png',
+                'images/黄芪图.png',
+                'images/桔梗图.png',
+                'images/研磨图.png'
+                // 'images/image8.png',
+                // 'images/image9.png',
+                // 'images/image10.png',
+                // 'images/image11.png',
+                // 'images/image12.png',
+                // 'images/image13.png',
+                // 'images/image14.png',
+                // 'images/image15.png',
+                // 'images/image16.png',
+                // 'images/image17.png',
+                // 'images/image18.png'
             ];
             
-            const imageCount = 15;
-            const IMAGE_SIZE = 250;          // 基础大小
+            const imageCount = 20;
+            const IMAGE_SIZE = 180;          // 基础大小
 
             let imagesData = [];               // 存储每个图片的动画参数
             let animationFrameId = null;

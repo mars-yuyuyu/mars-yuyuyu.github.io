@@ -57,16 +57,82 @@
             z-index: 1001;
             pointer-events: none;
         }
+
+        .page-title {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            font-weight: bold;
+            color: #333;
+            z-index: 1000;
+            font-size: 58px;
+            font-family: "Times New Roman", Georgia, serif;
+        }
+
+        .page-subtitle {
+            position: absolute;
+            top: 120px;
+            left: 50px;
+            color: #333;
+            z-index: 1000;
+            font-size: 45px;
+            font-style: italic;
+            font-family: "Times New Roman", Georgia, serif;
+        }
+
+        @media (max-width: 1024px) {
+            .page-title {
+                top: 32px;
+                left: 24px;
+                font-size: 42px;
+            }
+
+            .page-subtitle {
+                top: 88px;
+                left: 24px;
+                font-size: 30px;
+            }
+
+            .title-fixed-image {
+                top: 24px;
+                left: auto;
+                right: 16px;
+                width: 190px;
+                height: 190px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page-title {
+                top: 20px;
+                left: 16px;
+                font-size: 30px;
+            }
+
+            .page-subtitle {
+                top: 60px;
+                left: 16px;
+                font-size: 20px;
+            }
+
+            .title-fixed-image {
+                top: 10px;
+                right: 8px;
+                width: 120px;
+                height: 120px;
+                opacity: 0.92;
+            }
+        }
     </style>
 </head>
 <body>
     <div id="imageContainer"></div>
     
     <!-- 添加左上角标题 -->
-    <h1 style="position: absolute; top: 50px; left: 50px; font-weight: bold; color: #333; z-index: 1000; font-size: 58px; font-family: 'Times New Roman', Georgia, serif;">
+    <h1 class="page-title">
         YAO:
     </h1>
-    <h2 style="position: absolute; top: 120px; left: 50px; color: #333; z-index: 1000; font-size: 45px; font-style: italic; font-family: 'Times New Roman', Georgia, serif;">
+    <h2 class="page-subtitle">
         a herbal archive
     </h2>
     <img class="title-fixed-image" src="images/五行生克图.png" alt="标题右侧固定图片">
@@ -96,8 +162,8 @@
                 // 'images/image18.png'
             ];
             
-            const imageCount = 20;
-            const IMAGE_SIZE = 180;          // 基础大小
+            const imageCount = window.matchMedia('(max-width: 640px)').matches ? 20 : 20;
+            const IMAGE_SIZE = window.matchMedia('(max-width: 640px)').matches ? 100 : 180;          // 基础大小
 
             let imagesData = [];               // 存储每个图片的动画参数
             let animationFrameId = null;

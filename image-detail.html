@@ -69,6 +69,7 @@
 
         .right-panel {
             padding-top: 18px;
+            min-width: 0;
         }
 
         .name-en {
@@ -90,7 +91,7 @@
             margin: 15px 0 40px;
             border: 0;
             border-top: 2px solid #262626;
-            width: 131%;
+            width: 100%;
         }
 
         .essence {
@@ -107,6 +108,7 @@
             max-width: 820px;
             font-size: 40px;
             line-height: 1.32;
+            word-break: break-word;
         }
 
         .audio-block {
@@ -188,43 +190,83 @@
         @media (max-width: 780px) {
             .page {
                 min-height: auto;
-                padding: 24px 18px;
+                padding: 16px 14px 18px;
             }
 
             .main-section {
                 grid-template-columns: 1fr;
-                gap: 12px;
+                gap: 8px;
             }
 
             .left-panel {
-                min-height: 200px;
-                max-width: 280px;
+                min-height: auto;
+                max-width: 100%;
+                width: 100%;
+                align-items: center;
             }
 
             .herb-image {
-                max-width: 400px;
-                margin-top: 12px;
+                width: 88%;
+                max-width: 320px;
+                margin-top: 2px;
+            }
+
+            .audio-block {
+                width: min(92vw, 320px);
+                margin-top: 10px;
+            }
+
+            .right-panel {
+                width: 100%;
+                padding-top: 4px;
+            }
+
+            .title-top {
+                font-size: 32px;
+                margin-bottom: 12px;
+            }
+
+            .title-top .cn {
+                font-size: 34px;
             }
 
             .name-en {
-                font-size: 46px;
+                font-size: 42px;
             }
 
             .name-latin {
-                font-size: 38px;
+                font-size: 30px;
+                margin-top: 6px;
             }
 
             .essence {
-                font-size: 26px;
+                font-size: 22px;
+                margin-bottom: 12px;
             }
 
             .desc {
-                font-size: 24px;
+                max-width: 100%;
+                font-size: 19px;
+                line-height: 1.45;
             }
 
             .bottom-icons {
+                width: 100%;
                 margin-left: 0;
-                margin-top: 22px;
+                margin-top: 14px;
+                justify-content: center;
+                gap: 12px;
+            }
+
+            .bottom-icons img {
+                width: min(40vw, 132px);
+                height: min(40vw, 132px);
+            }
+
+            .back-link {
+                right: 12px;
+                bottom: 10px;
+                font-size: 12px;
             }
 
         }
